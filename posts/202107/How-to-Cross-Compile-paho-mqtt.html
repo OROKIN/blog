@@ -21,19 +21,19 @@
     var CONFIG = {"hostname":"kcode.cc","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="无显示器&#x2F;键鼠初始化配置开启 sshd在 PC 上部署完 Raspbian 系统至 TF 卡上后，在 boot 分区根目录新建一个名为 ssh 的空文件即可在树莓派启动后开启 Raspbian 的 sshd 服务。树莓派默认账户：pi，默认密码：raspberry。">
+  <meta name="description" content="准备工作下载源码两种方式下载源码:    git clone   直接下载指定 tag 源码    对于第 1 种方式，会把历史 commit 都 clone 下来，对于立项久远、社区活跃的项目来说，体积较大，加之 github 在国内访问不稳定，而且只是使用不是开发，所以这里选择第 2 种方式。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="树莓派备忘">
-<meta property="og:url" content="https://kcode.cc/posts/201906/Memo-of-Raspberry-Pi.html">
+<meta property="og:title" content="交叉编译 paho.mqtt">
+<meta property="og:url" content="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html">
 <meta property="og:site_name" content="K CODE">
-<meta property="og:description" content="无显示器&#x2F;键鼠初始化配置开启 sshd在 PC 上部署完 Raspbian 系统至 TF 卡上后，在 boot 分区根目录新建一个名为 ssh 的空文件即可在树莓派启动后开启 Raspbian 的 sshd 服务。树莓派默认账户：pi，默认密码：raspberry。">
+<meta property="og:description" content="准备工作下载源码两种方式下载源码:    git clone   直接下载指定 tag 源码    对于第 1 种方式，会把历史 commit 都 clone 下来，对于立项久远、社区活跃的项目来说，体积较大，加之 github 在国内访问不稳定，而且只是使用不是开发，所以这里选择第 2 种方式。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-06-30T13:27:10.000Z">
-<meta property="article:modified_time" content="2021-07-13T01:47:06.670Z">
+<meta property="article:published_time" content="2021-07-13T06:24:40.000Z">
+<meta property="article:modified_time" content="2021-07-13T08:26:50.374Z">
 <meta property="article:author" content="Oblivion">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://kcode.cc/posts/201906/Memo-of-Raspberry-Pi.html">
+<link rel="canonical" href="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>树莓派备忘 | K CODE</title>
+  <title>交叉编译 paho.mqtt | K CODE</title>
   
 
 
@@ -180,7 +180,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://kcode.cc/posts/201906/Memo-of-Raspberry-Pi.html">
+    <link itemprop="mainEntityOfPage" href="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -193,7 +193,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          树莓派备忘
+          交叉编译 paho.mqtt
         </h1>
 
         <div class="post-meta">
@@ -202,23 +202,21 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-06-30 21:27:10" itemprop="dateCreated datePublished" datetime="2019-06-30T21:27:10+08:00">2019-06-30</time>
+              <time title="创建时间：2021-07-13 14:24:40 / 修改时间：16:26:50" itemprop="dateCreated datePublished" datetime="2021-07-13T14:24:40+08:00">2021-07-13</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-13 09:47:06" itemprop="dateModified" datetime="2021-07-13T09:47:06+08:00">2021-07-13</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/RaspberryPi/" itemprop="url" rel="index"><span itemprop="name">RaspberryPi</span></a>
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/MQTT/" itemprop="url" rel="index"><span itemprop="name">MQTT</span></a>
                 </span>
             </span>
 
@@ -233,15 +231,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="无显示器-键鼠初始化配置"><a href="#无显示器-键鼠初始化配置" class="headerlink" title="无显示器/键鼠初始化配置"></a>无显示器/键鼠初始化配置</h2><h3 id="开启-sshd"><a href="#开启-sshd" class="headerlink" title="开启 sshd"></a>开启 sshd</h3><p>在 PC 上部署完 Raspbian 系统至 TF 卡上后，在 boot 分区根目录新建一个名为 <code>ssh</code> 的空文件即可在树莓派启动后开启 Raspbian 的 sshd 服务。<br>树莓派默认账户：<code>pi</code>，默认密码：<code>raspberry</code>。  </p>
+        <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h3><p>两种方式下载源码:  </p>
+<ol>
+<li>git clone  </li>
+<li>直接下载指定 tag 源码  </li>
+</ol>
+<p>对于第 1 种方式，会把历史 commit 都 clone 下来，对于立项久远、社区活跃的项目来说，体积较大，加之 github 在国内访问不稳定，而且只是使用不是开发，所以这里选择第 2 种方式。  </p>
 <span id="more"></span>
 
-<h3 id="配置-WLAN"><a href="#配置-WLAN" class="headerlink" title="配置 WLAN"></a>配置 WLAN</h3><p>在 PC 上部署完 Raspbian 系统至 TF 卡后，在 boot 分区根目录新建一个名为 <code>wpa_supplicant.conf</code> 的文本文件，在文件中输入一下内容：  </p>
-<figure class="highlight ini"><figcaption><span>/boot/wpa_supplicant.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">country</span>=CN  &lt;= 国家/地区</span><br><span class="line"><span class="attr">ctrl_interface</span>=DIR=/var/run/wpa_supplicant GROUP=netdev</span><br><span class="line"><span class="attr">update_config</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">network</span>=&#123;</span><br><span class="line"><span class="attr">ssid</span>=<span class="string">&quot;WiFi-Name&quot;</span>  &lt;= WiFi 名称</span><br><span class="line"><span class="attr">psk</span>=<span class="string">&quot;12345678&quot;</span>  &lt;= WiFi 密码</span><br><span class="line"><span class="attr">key_mgmt</span>=WPA-PSK  &lt;= 加密方式</span><br><span class="line"><span class="attr">priority</span>=<span class="number">1</span>  &lt;= 优先级，数字越大优先级越高</span><br><span class="line"><span class="attr">scan_ssid</span>=<span class="number">1</span>  &lt;= 连接隐藏 WiFi 加上此行，否则不加或设为 <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><em>此处 <code>&lt;=</code> 为注释说明，请勿无脑复制。</em></p>
-<h2 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h2><h3 id="配置程序自启"><a href="#配置程序自启" class="headerlink" title="配置程序自启"></a>配置程序自启</h3><p>Demo 如下：</p>
-<figure class="highlight ini"><figcaption><span>demo.service</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=demo service</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">ExecStart</span>=/path/to/your/bin</span><br><span class="line"><span class="attr">StandardOutput</span>=syslog</span><br><span class="line"><span class="attr">StandardError</span>=inherit</span><br><span class="line"><span class="attr">User</span>=nobody  &lt;= 以 nobody 用户身份运行</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
-<p>移动/复制到 <code>/usr/lib/systemd/system/</code> 目录下，运行 <code># systemctl enable demo.service</code> 即可开启该服务。 </p>
+<p>在其项目 <a target="_blank" rel="noopener" href="https://github.com/eclipse/paho.mqtt.c/releases">Release</a> 页找到最新的 Release Tag，下载 <code>Source code</code>。</p>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight bash"><figcaption><span>Debian Based System</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install build-essential gcc make cmake cmake-gui cmake-curses-gui</span><br></pre></td></tr></table></figure>
+
+<p>如果需要使用 SSL 功能，则还需要预先交叉编译 OpenSSL，可参考之前的文章。  </p>
+<p>如果需要生成文档，还需要安装 <code>doxygen</code> 和 <code>graphhviz</code>:  </p>
+<figure class="highlight bash"><figcaption><span>Debian Based System</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install doxygen graphviz</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-Makefile"><a href="#配置-Makefile" class="headerlink" title="配置 Makefile"></a>配置 Makefile</h2><h3 id="修改交叉编译工具链"><a href="#修改交叉编译工具链" class="headerlink" title="修改交叉编译工具链"></a>修改交叉编译工具链</h3><p>新建一个目录作为编译用目录，拷贝 paho.mqtt 源码目录下 <code>cmake</code> 目录内的 <code>toolchain.linux-arm11.cmake</code> 至编译用目录，修改以下内容为自己的交叉编译工具链：  </p>
+<figure class="highlight cmake"><figcaption><span>toolchain.linux-arm11.cmake</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span>(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成-Makefile"><a href="#生成-Makefile" class="headerlink" title="生成 Makefile"></a>生成 Makefile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmake \</span><br><span class="line">-DPAHO_WITH_SSL=TRUE \</span><br><span class="line">-DPAHO_BUILD_SAMPLES=TRUE \</span><br><span class="line">-DPAHO_BUILD_DOCUMENTATION=TRUE \</span><br><span class="line">-DPAHO_HIGH_PERFORMANCE=TRUE \</span><br><span class="line">-DOPENSSL_ROOT_DIR=/path/to/openssl/install/root \</span><br><span class="line">-DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain.linux-arm11.cmake \</span><br><span class="line">/path/to/paho.mqtt.c/<span class="built_in">source</span></span><br></pre></td></tr></table></figure>
+
+<p>参数说明:<br>| 参数 | 默认值 | 描述 |<br>| — | — | — |<br>| PAHO_BUILD_SHARED | TRUE | 编译成共享库 |<br>| PAHO_BUILD_STATIC | FALSE | 编译成静态库 |<br>| PAHO_HIGH_PERFORMANCE | FALSE | 高性能模式，如果设为 <code>TRUE</code> 则编译时 debug 追踪等功能将会被排除 |<br>| PAHO_WITH_SSL | FALSE | 开启 SSL 功能 |<br>| OPENSSL_ROOT_DIR | “” | OpenSSL 安装目录 |<br>| PAHO_BUILD_DOCUMENTATION | FALSE | 生成文档 |<br>| PAHO_BUILD_SAMPLES | FALSE | 编译示例 |</p>
+<p><em>如果 <code>OPENSSL_ROOT_DIR</code> 目录内含有共享库，那么编译完成的 paho.mqtt 共享库需要依赖 OpenSSL 的共享库。</em></p>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<p>如果遇到 <code>ld: cannot find -lanl</code> 的错误，则需要在源码目录下，找到 <code>src/CMakeLists.txt</code>，将其中的以下内容注释（使用 <code>#</code> 注释）：  </p>
+<figure class="highlight plaintext"><figcaption><span>src/CMakeLists.txt</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FIND_LIBRARY(LIB_ANL anl)</span><br><span class="line">IF(LIB_ANL)</span><br><span class="line">    SET(LIBS_SYSTEM &quot;$&#123;LIBS_SYSTEM&#125;&quot; anl)</span><br><span class="line">ENDIF()</span><br></pre></td></tr></table></figure>
+<p>然后重新配置一次 Makefile。原因是 <code>libanl</code> 只支持 <code>glibc</code>。</p>
+<h3 id="打包-可选"><a href="#打包-可选" class="headerlink" title="打包(可选)"></a>打包(可选)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make package</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -257,7 +275,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://kcode.cc/posts/201906/Memo-of-Raspberry-Pi.html" title="树莓派备忘">https://kcode.cc/posts/201906/Memo-of-Raspberry-Pi.html</a>
+    <a href="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html" title="交叉编译 paho.mqtt">https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -274,13 +292,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/201905/Install-and-Configure-Samba.html" rel="prev" title="搭建 Samba 服务">
-      <i class="fa fa-chevron-left"></i> 搭建 Samba 服务
+    <a href="/posts/202107/How-to-Cross-Compile-Openssl.html" rel="prev" title="交叉编译 Openssl">
+      <i class="fa fa-chevron-left"></i> 交叉编译 Openssl
     </a></div>
-      <div class="post-nav-item">
-    <a href="/posts/201906/vim-configuration-for-self-use.html" rel="next" title="自用 vim 配置文件">
-      自用 vim 配置文件 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -339,7 +354,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E6%98%BE%E7%A4%BA%E5%99%A8-%E9%94%AE%E9%BC%A0%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">无显示器&#x2F;键鼠初始化配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%90%AF-sshd"><span class="nav-number">1.1.</span> <span class="nav-text">开启 sshd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-WLAN"><span class="nav-number">1.2.</span> <span class="nav-text">配置 WLAN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">其他配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%90%AF"><span class="nav-number">2.1.</span> <span class="nav-text">配置程序自启</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">下载源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">1.2.</span> <span class="nav-text">安装依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Makefile"><span class="nav-number">2.</span> <span class="nav-text">配置 Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="nav-number">2.1.</span> <span class="nav-text">修改交叉编译工具链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90-Makefile"><span class="nav-number">2.2.</span> <span class="nav-text">生成 Makefile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85-%E5%8F%AF%E9%80%89"><span class="nav-number">3.1.</span> <span class="nav-text">打包(可选)</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
