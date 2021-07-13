@@ -293,6 +293,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -459,6 +460,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '2b93e93545281a283ea1',
+      clientSecret: '5e19339e2c5ee6bd70c3c1f6b440f725c180e2c6',
+      repo        : 'github.com/xray-bit/blog-comments',
+      owner       : 'xray-bit',
+      admin       : ['xray-bit'],
+      id          : 'a2fe1df2382f3c1f079333dc1a3a3ac7',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>
