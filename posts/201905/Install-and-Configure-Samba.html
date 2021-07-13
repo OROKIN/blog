@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kcode.cc","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文为在树莓派 Raspbian 上搭建 Samba 的简要记录。本文中 # 开头的命令表示需要 root 权限执行，$ 开头的命令表示普通用户可执行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建 Samba 服务">
+<meta property="og:url" content="https://kcode.cc/posts/201905/Install-and-Configure-Samba.html">
+<meta property="og:site_name" content="K CODE">
+<meta property="og:description" content="本文为在树莓派 Raspbian 上搭建 Samba 的简要记录。本文中 # 开头的命令表示需要 root 权限执行，$ 开头的命令表示普通用户可执行。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-23T13:25:02.000Z">
+<meta property="article:modified_time" content="2021-07-13T01:47:06.670Z">
+<meta property="article:author" content="Oblivion">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kcode.cc/posts/201905/Install-and-Configure-Samba.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>搭建 Samba 服务 | K CODE</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">K CODE</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">A Simple Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kcode.cc/posts/201905/Install-and-Configure-Samba.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Oblivion">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K CODE">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭建 Samba 服务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-23 21:25:02" itemprop="dateCreated datePublished" datetime="2019-05-23T21:25:02+08:00">2019-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-13 09:47:06" itemprop="dateModified" datetime="2021-07-13T09:47:06+08:00">2021-07-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RaspberryPi/" itemprop="url" rel="index"><span itemprop="name">RaspberryPi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文为在树莓派 Raspbian 上搭建 Samba 的简要记录。<br>本文中 <code>#</code> 开头的命令表示需要 <code>root</code> 权限执行，<code>$</code> 开头的命令表示普通用户可执行。</p>
+<span id="more"></span>
+
+<h2 id="安装-Samba"><a href="#安装-Samba" class="headerlink" title="安装 Samba"></a>安装 Samba</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt sintall samba</span><br></pre></td></tr></table></figure>
+
+<h2 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight ini"><figcaption><span>/etc/samba/smb.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Global parameters</span></span><br><span class="line"><span class="section">[global]</span></span><br><span class="line">    log <span class="attr">file</span> = /var/log/samba/log.%m</span><br><span class="line">    max log <span class="attr">size</span> = <span class="number">50</span></span><br><span class="line">    <span class="attr">syslog</span> = <span class="number">0</span></span><br><span class="line">    panic <span class="attr">action</span> = /usr/share/samba/panic-action %d</span><br><span class="line">    usershare allow <span class="attr">guests</span> = <span class="literal">Yes</span></span><br><span class="line">    load <span class="attr">printers</span> = <span class="literal">No</span>  &lt;==没有打印机，不需要加载</span><br><span class="line">    client max <span class="attr">protocol</span> = SMB3  &lt;==设置客户端最大协议版本</span><br><span class="line">    client min <span class="attr">protocol</span> = SMB2  &lt;==设置客户端最小协议版本</span><br><span class="line">    server min <span class="attr">protocol</span> = SMB2  &lt;==服务器最小协议版本</span><br><span class="line">    map to <span class="attr">guest</span> = Bad User</span><br><span class="line">    obey pam <span class="attr">restrictions</span> = <span class="literal">Yes</span></span><br><span class="line">    pam password <span class="attr">change</span> = <span class="literal">Yes</span></span><br><span class="line">    passwd <span class="attr">chat</span> = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .</span><br><span class="line">    passwd <span class="attr">program</span> = /usr/bin/passwd %u</span><br><span class="line">    <span class="attr">security</span> = USER  &lt;==开启非匿名访问</span><br><span class="line">    server <span class="attr">role</span> = standalone server</span><br><span class="line">    unix password <span class="attr">sync</span> = <span class="literal">Yes</span></span><br><span class="line">    dns <span class="attr">proxy</span> = <span class="literal">No</span></span><br><span class="line">    idmap config * : <span class="attr">backend</span> = tdb</span><br><span class="line"></span><br><span class="line"><span class="section">[myshares]</span>  &lt;==共享文件夹名称</span><br><span class="line">    <span class="attr">comment</span> = my shares</span><br><span class="line">    <span class="attr">path</span> = /mnt/hdd &lt;==此处为需要共享的目录</span><br><span class="line">    read <span class="attr">only</span> = <span class="literal">No</span></span><br><span class="line">    <span class="attr">writeable</span> = <span class="literal">yes</span> &lt;==开启可写( testparm 默认不显示 )</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试配置是否正确"><a href="#测试配置是否正确" class="headerlink" title="测试配置是否正确"></a>测试配置是否正确</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ testparm</span><br></pre></td></tr></table></figure>
+
+<p>关于 Samba 协议版本：由于 Windows 10 已经默认不支持 SMBv1 了 ( 仍可通过 「启用或关闭 Windows 功能」 来开启对 SMBv1 的支持 )，所以这里将协议版本设置为 SMBv2 。  </p>
+<h2 id="建立-Samba-账户"><a href="#建立-Samba-账户" class="headerlink" title="建立 Samba 账户"></a>建立 Samba 账户</h2><h3 id="1-新建系统账户"><a href="#1-新建系统账户" class="headerlink" title="1. 新建系统账户"></a>1. 新建系统账户</h3><p><em>需要建立的 Samba 账户必须已经在 Linux 中存在</em><br><em>此处也可直接用已经存在的账户，不要要新建</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># useradd -G users smb</span><br><span class="line"># passwd smb</span><br><span class="line">(输入两次密码，此为 Linux 账户的密码，非 Samba 账户的访问密码)</span><br></pre></td></tr></table></figure>
+<h3 id="2-使用-pdbedit-新增-Samba-账户"><a href="#2-使用-pdbedit-新增-Samba-账户" class="headerlink" title="2. 使用 pdbedit 新增 Samba 账户"></a>2. 使用 pdbedit 新增 Samba 账户</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># pdbedit -a -u smb</span><br><span class="line">(接下来输入 smb 的密码)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-1-查询目前已经存在的-Samba-账号"><a href="#2-1-查询目前已经存在的-Samba-账号" class="headerlink" title="2.1 查询目前已经存在的 Samba 账号"></a>2.1 查询目前已经存在的 Samba 账号</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># pdbedit -L</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-修改密码"><a href="#2-2-修改密码" class="headerlink" title="2.2 修改密码"></a>2.2 修改密码</h4><p>管理密码参数是使用 pdbedit，修改密码是用 smbpasswd </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># smbpasswd smb</span><br></pre></td></tr></table></figure>
+
+<h2 id="重启-Samba-服务确保新配置生效"><a href="#重启-Samba-服务确保新配置生效" class="headerlink" title="重启 Samba 服务确保新配置生效"></a>重启 Samba 服务确保新配置生效</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl restart smbd.service &amp;&amp; systemctl restart nmbd.service</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于挂载-NTFS-的移动硬盘遇到的坑"><a href="#关于挂载-NTFS-的移动硬盘遇到的坑" class="headerlink" title="关于挂载 NTFS 的移动硬盘遇到的坑"></a>关于挂载 NTFS 的移动硬盘遇到的坑</h2><p>使用 <code># mount /dev/sda1 /mnt/hdd</code> 挂载以后，发现登录 Samba 后无法写入，总是提示没有权限。几番折腾发现是 Linux内核 对 NTFS 文件系统的支持不足，只支持读取，要写入的话需要安装第三方 NTFS 支持包 <code>ntfs-3g</code>，安装后在挂载时加上参数 <code>-t ntfs-3g</code> 即可。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/201710/Install-Homestead-by-Vagrant-on-Windows.html" rel="prev" title="Windows 环境下使用 Vagrant 安装 Homestead">
+      <i class="fa fa-chevron-left"></i> Windows 环境下使用 Vagrant 安装 Homestead
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/201906/Memo-of-Raspberry-Pi.html" rel="next" title="树莓派备忘">
+      树莓派备忘 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Samba"><span class="nav-number">1.</span> <span class="nav-text">安装 Samba</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">编辑配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%85%8D%E7%BD%AE%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="nav-number">2.1.</span> <span class="nav-text">测试配置是否正确</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-Samba-%E8%B4%A6%E6%88%B7"><span class="nav-number">3.</span> <span class="nav-text">建立 Samba 账户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%96%B0%E5%BB%BA%E7%B3%BB%E7%BB%9F%E8%B4%A6%E6%88%B7"><span class="nav-number">3.1.</span> <span class="nav-text">1. 新建系统账户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-pdbedit-%E6%96%B0%E5%A2%9E-Samba-%E8%B4%A6%E6%88%B7"><span class="nav-number">3.2.</span> <span class="nav-text">2. 使用 pdbedit 新增 Samba 账户</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E6%9F%A5%E8%AF%A2%E7%9B%AE%E5%89%8D%E5%B7%B2%E7%BB%8F%E5%AD%98%E5%9C%A8%E7%9A%84-Samba-%E8%B4%A6%E5%8F%B7"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.1 查询目前已经存在的 Samba 账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.2 修改密码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%90%AF-Samba-%E6%9C%8D%E5%8A%A1%E7%A1%AE%E4%BF%9D%E6%96%B0%E9%85%8D%E7%BD%AE%E7%94%9F%E6%95%88"><span class="nav-number">4.</span> <span class="nav-text">重启 Samba 服务确保新配置生效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%8C%82%E8%BD%BD-NTFS-%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91"><span class="nav-number">5.</span> <span class="nav-text">关于挂载 NTFS 的移动硬盘遇到的坑</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Oblivion</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Oblivion</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
