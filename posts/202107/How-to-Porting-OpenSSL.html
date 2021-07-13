@@ -18,22 +18,24 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kcode.cc","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"kcode.cc","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="准备工作下载源码两种方式下载源码:    git clone   直接下载指定 tag 源码    对于第 1 种方式，会把历史 commit 都 clone 下来，对于立项久远、社区活跃的项目来说，体积较大，加之 github 在国内访问不稳定，而且只是使用不是开发，所以这里选择第 2 种方式。">
+  <meta name="description" content="源码下载官方网址：https:&#x2F;&#x2F;www.openssl.org&#x2F;source&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="交叉编译 paho.mqtt">
-<meta property="og:url" content="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html">
+<meta property="og:title" content="移植 OpenSSL">
+<meta property="og:url" content="https://kcode.cc/posts/202107/How-to-Porting-OpenSSL.html">
 <meta property="og:site_name" content="K CODE">
-<meta property="og:description" content="准备工作下载源码两种方式下载源码:    git clone   直接下载指定 tag 源码    对于第 1 种方式，会把历史 commit 都 clone 下来，对于立项久远、社区活跃的项目来说，体积较大，加之 github 在国内访问不稳定，而且只是使用不是开发，所以这里选择第 2 种方式。">
+<meta property="og:description" content="源码下载官方网址：https:&#x2F;&#x2F;www.openssl.org&#x2F;source&#x2F;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-13T06:24:40.000Z">
-<meta property="article:modified_time" content="2021-07-13T08:26:50.374Z">
+<meta property="article:published_time" content="2021-07-13T02:11:05.000Z">
+<meta property="article:modified_time" content="2021-07-13T08:54:04.017Z">
 <meta property="article:author" content="Oblivion">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="OpenSSL">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html">
+<link rel="canonical" href="https://kcode.cc/posts/202107/How-to-Porting-OpenSSL.html">
 
 
 <script id="page-configurations">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>交叉编译 paho.mqtt | K CODE</title>
+  <title>移植 OpenSSL | K CODE</title>
   
 
 
@@ -180,7 +182,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html">
+    <link itemprop="mainEntityOfPage" href="https://kcode.cc/posts/202107/How-to-Porting-OpenSSL.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -193,7 +195,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          交叉编译 paho.mqtt
+          移植 OpenSSL
         </h1>
 
         <div class="post-meta">
@@ -204,7 +206,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-13 14:24:40 / 修改时间：16:26:50" itemprop="dateCreated datePublished" datetime="2021-07-13T14:24:40+08:00">2021-07-13</time>
+              <time title="创建时间：2021-07-13 10:11:05 / 修改时间：16:54:04" itemprop="dateCreated datePublished" datetime="2021-07-13T10:11:05+08:00">2021-07-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -213,10 +215,6 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/MQTT/" itemprop="url" rel="index"><span itemprop="name">MQTT</span></a>
                 </span>
             </span>
 
@@ -231,35 +229,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h3><p>两种方式下载源码:  </p>
-<ol>
-<li>git clone  </li>
-<li>直接下载指定 tag 源码  </li>
-</ol>
-<p>对于第 1 种方式，会把历史 commit 都 clone 下来，对于立项久远、社区活跃的项目来说，体积较大，加之 github 在国内访问不稳定，而且只是使用不是开发，所以这里选择第 2 种方式。  </p>
+        <h2 id="源码下载"><a href="#源码下载" class="headerlink" title="源码下载"></a>源码下载</h2><p>官方网址：<a target="_blank" rel="noopener" href="https://www.openssl.org/source/">https://www.openssl.org/source/</a>  </p>
 <span id="more"></span>
 
-<p>在其项目 <a target="_blank" rel="noopener" href="https://github.com/eclipse/paho.mqtt.c/releases">Release</a> 页找到最新的 Release Tag，下载 <code>Source code</code>。</p>
-<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight bash"><figcaption><span>Debian Based System</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install build-essential gcc make cmake cmake-gui cmake-curses-gui</span><br></pre></td></tr></table></figure>
+<h2 id="配置-Makefile"><a href="#配置-Makefile" class="headerlink" title="配置 Makefile"></a>配置 Makefile</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./Configure linux-armv4 \</span><br><span class="line">--cross-compile-prefix=arm-linux- \</span><br><span class="line">--prefix=/path/to/install \</span><br><span class="line">no-asm shared no-async</span><br></pre></td></tr></table></figure>
 
-<p>如果需要使用 SSL 功能，则还需要预先交叉编译 OpenSSL，可参考之前的文章。  </p>
-<p>如果需要生成文档，还需要安装 <code>doxygen</code> 和 <code>graphhviz</code>:  </p>
-<figure class="highlight bash"><figcaption><span>Debian Based System</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install doxygen graphviz</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置-Makefile"><a href="#配置-Makefile" class="headerlink" title="配置 Makefile"></a>配置 Makefile</h2><h3 id="修改交叉编译工具链"><a href="#修改交叉编译工具链" class="headerlink" title="修改交叉编译工具链"></a>修改交叉编译工具链</h3><p>新建一个目录作为编译用目录，拷贝 paho.mqtt 源码目录下 <code>cmake</code> 目录内的 <code>toolchain.linux-arm11.cmake</code> 至编译用目录，修改以下内容为自己的交叉编译工具链：  </p>
-<figure class="highlight cmake"><figcaption><span>toolchain.linux-arm11.cmake</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span>(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)</span><br></pre></td></tr></table></figure>
-
-<h3 id="生成-Makefile"><a href="#生成-Makefile" class="headerlink" title="生成 Makefile"></a>生成 Makefile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmake \</span><br><span class="line">-DPAHO_WITH_SSL=TRUE \</span><br><span class="line">-DPAHO_BUILD_SAMPLES=TRUE \</span><br><span class="line">-DPAHO_BUILD_DOCUMENTATION=TRUE \</span><br><span class="line">-DPAHO_HIGH_PERFORMANCE=TRUE \</span><br><span class="line">-DOPENSSL_ROOT_DIR=/path/to/openssl/install/root \</span><br><span class="line">-DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain.linux-arm11.cmake \</span><br><span class="line">/path/to/paho.mqtt.c/<span class="built_in">source</span></span><br></pre></td></tr></table></figure>
-
-<p>参数说明:<br>| 参数 | 默认值 | 描述 |<br>| — | — | — |<br>| PAHO_BUILD_SHARED | TRUE | 编译成共享库 |<br>| PAHO_BUILD_STATIC | FALSE | 编译成静态库 |<br>| PAHO_HIGH_PERFORMANCE | FALSE | 高性能模式，如果设为 <code>TRUE</code> 则编译时 debug 追踪等功能将会被排除 |<br>| PAHO_WITH_SSL | FALSE | 开启 SSL 功能 |<br>| OPENSSL_ROOT_DIR | “” | OpenSSL 安装目录 |<br>| PAHO_BUILD_DOCUMENTATION | FALSE | 生成文档 |<br>| PAHO_BUILD_SAMPLES | FALSE | 编译示例 |</p>
-<p><em>如果 <code>OPENSSL_ROOT_DIR</code> 目录内含有共享库，那么编译完成的 paho.mqtt 共享库需要依赖 OpenSSL 的共享库。</em></p>
+<ul>
+<li><code>linux-armv4</code>: 从 <code>config</code> 文件来看，<code>armv[1-3]</code> 使用 <code>linux-generic32</code>，<code>armv[7-9]</code> 使用 <code>linux-armv4</code>；  </li>
+<li><code>no-asm</code>: 不使用汇编代码；从 <code>INSTALL</code> 文件得知，建议 debug 期间使用，生产环境不使用；</li>
+<li><code>shared</code>: 生成共享库；</li>
+<li><code>no-async</code>: <code>uclibc</code>/<code>musll-ibc</code> 等库不提供 <code>ucontext</code> 库，所以无法使用异步操作。  </li>
+</ul>
+<p><em>此配置是基于 openssl-1.1.1k 所写，不同版本可能会有差异，具体查看源码目录下的 <code>INSTALL</code> 文件。</em>  </p>
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
 
-<p>如果遇到 <code>ld: cannot find -lanl</code> 的错误，则需要在源码目录下，找到 <code>src/CMakeLists.txt</code>，将其中的以下内容注释（使用 <code>#</code> 注释）：  </p>
-<figure class="highlight plaintext"><figcaption><span>src/CMakeLists.txt</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FIND_LIBRARY(LIB_ANL anl)</span><br><span class="line">IF(LIB_ANL)</span><br><span class="line">    SET(LIBS_SYSTEM &quot;$&#123;LIBS_SYSTEM&#125;&quot; anl)</span><br><span class="line">ENDIF()</span><br></pre></td></tr></table></figure>
-<p>然后重新配置一次 Makefile。原因是 <code>libanl</code> 只支持 <code>glibc</code>。</p>
-<h3 id="打包-可选"><a href="#打包-可选" class="headerlink" title="打包(可选)"></a>打包(可选)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make package</span><br></pre></td></tr></table></figure>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
 
+<p>将安装在 <code>--prefix</code> 所指定的目录中。</p>
 
     </div>
 
@@ -275,7 +261,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html" title="交叉编译 paho.mqtt">https://kcode.cc/posts/202107/How-to-Cross-Compile-paho-mqtt.html</a>
+    <a href="https://kcode.cc/posts/202107/How-to-Porting-OpenSSL.html" title="移植 OpenSSL">https://kcode.cc/posts/202107/How-to-Porting-OpenSSL.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -285,6 +271,10 @@
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/OpenSSL/" rel="tag"># OpenSSL</a>
+          </div>
 
         
 
@@ -292,10 +282,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/202107/How-to-Cross-Compile-Openssl.html" rel="prev" title="交叉编译 Openssl">
-      <i class="fa fa-chevron-left"></i> 交叉编译 Openssl
+    <a href="/posts/201906/How-to-Active-Windows-or-MS-Office-by-Using-KMS.html" rel="prev" title="使用 KMS 激活 Windows 和 MS Office">
+      <i class="fa fa-chevron-left"></i> 使用 KMS 激活 Windows 和 MS Office
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/202107/How-to-Porting-Paho-MQTT.html" rel="next" title="移植 paho.mqtt">
+      移植 paho.mqtt <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -354,7 +347,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">下载源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">1.2.</span> <span class="nav-text">安装依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Makefile"><span class="nav-number">2.</span> <span class="nav-text">配置 Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="nav-number">2.1.</span> <span class="nav-text">修改交叉编译工具链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90-Makefile"><span class="nav-number">2.2.</span> <span class="nav-text">生成 Makefile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85-%E5%8F%AF%E9%80%89"><span class="nav-number">3.1.</span> <span class="nav-text">打包(可选)</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.</span> <span class="nav-text">源码下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Makefile"><span class="nav-number">2.</span> <span class="nav-text">配置 Makefile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">4.</span> <span class="nav-text">安装</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -374,8 +367,13 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
